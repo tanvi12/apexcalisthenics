@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "33183935700",
+    "firebase_url": "https://apexcalisthenics-dc512.firebaseio.com",
+    "project_id": "apexcalisthenics-dc512",
+    "storage_bucket": "apexcalisthenics-dc512.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33183935700:android:7277f57e10b1a5b3d1df41",
+        "android_client_info": {
+          "package_name": "apexcalisthenics.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33183935700-tavu81rsrgk8t3v1dfr1auv3nv40ukuk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyuiBRu0REjsG_zoAmB02mh6nzMKIv2So"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "33183935700-tavu81rsrgk8t3v1dfr1auv3nv40ukuk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "33183935700-aosggb39v0ktshlk7bq8j6mfso3bpo9e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.flutter.apex.calisthenics"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
