@@ -45,67 +45,82 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
       onModelReady: (model) => model.initialise(),
-      builder: (context, model, _) => Theme(
-        data: AppTheme.buildLightTheme(),
-        child: Container(
-          child: Scaffold(
-            body: Stack(
-              children: <Widget>[
-                InkWell(
-                  splashColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  },
-                  child: Column(
-                    children: <Widget>[
-                      getAppBarUI(),
-                      Expanded(
-                        child: NestedScrollView(
-                          controller: _scrollController,
-                          headerSliverBuilder:
-                              (BuildContext context, bool innerBoxIsScrolled) {
-                            return <Widget>[
-                              SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
-                                  return Column(
-                                    children: <Widget>[
-                                      getSearchBarUI(),
-                                    ],
-                                  );
-                                }, childCount: 1),
-                              ),
-                            ];
-                          },
-                          body: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
+      builder: (context, model, _) =>
+          Theme(
+            data: AppTheme.buildLightTheme(),
+            child: Container(
+              child: Scaffold(
+                body: Stack(
+                  children: <Widget>[
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          getAppBarUI(),
+                          Expanded(
+                            child: NestedScrollView(
+                              controller: _scrollController,
+                              headerSliverBuilder:
+                                  (BuildContext context,
+                                  bool innerBoxIsScrolled) {
+                                return <Widget>[
+                                  SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                            (BuildContext context, int index) {
+                                          return Column(
+                                            children: <Widget>[
+                                              getSearchBarUI(),
+                                            ],
+                                          );
+                                        }, childCount: 1),
+                                  ),
+                                ];
+                              },
+                              body: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: model.items
+                                          .length,
+                                      itemBuilder: (context, i) {
+                                        if( !model.items.keys.toList()[i].toString().toLowerCase().contains("article"))
+                                        return productsCard(
+                                            model.items.keys.toList()[i].toString().capitalize(),
+                                            model.items[model.items.keys
+                                                .toList()[i]]);
+                                        else
+                                          return productsVerticalCard(
+                                              model.items.keys.toList()[i].toString().capitalize(),
+                                              model.items[model.items.keys
+                                                  .toList()[i]]);
+                                      },
+                                    ),
+
+
+                                  ],
                                 ),
-                                productsCard("New", model.workouts),
-                                productsCard("Exercises", model.exercises),
-                                productsCard("Workouts", model.workouts),
-                                productsCard("Nutrition", model.nutrition),
-                                productsCard("Equipment", model.equipment),
-                                productsVerticalCard(
-                                    "NewsArticles", model.articles),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -119,7 +134,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
           child: Container(
             height: 24,
             decoration: BoxDecoration(
-              color: AppTheme.buildLightTheme().backgroundColor,
+              color: AppTheme
+                  .buildLightTheme()
+                  .backgroundColor,
               boxShadow: <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey.withOpacity(0.2),
@@ -130,10 +147,12 @@ class _DiscoverScreenState extends State<DiscoverScreen>
           ),
         ),
         Container(
-          color: AppTheme.buildLightTheme().backgroundColor,
+          color: AppTheme
+              .buildLightTheme()
+              .backgroundColor,
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
+            const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -181,7 +200,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(Icons.sort,
-                                color: AppTheme.buildLightTheme().primaryColor),
+                                color: AppTheme
+                                    .buildLightTheme()
+                                    .primaryColor),
                           ),
                         ],
                       ),
@@ -214,7 +235,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
               padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppTheme.buildLightTheme().backgroundColor,
+                  color: AppTheme
+                      .buildLightTheme()
+                      .backgroundColor,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(38.0),
                   ),
@@ -233,7 +256,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     style: const TextStyle(
                       fontSize: 18,
                     ),
-                    cursorColor: AppTheme.buildLightTheme().primaryColor,
+                    cursorColor: AppTheme
+                        .buildLightTheme()
+                        .primaryColor,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Search...',
@@ -245,7 +270,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
           ),
           Container(
             decoration: BoxDecoration(
-              color: AppTheme.buildLightTheme().primaryColor,
+              color: AppTheme
+                  .buildLightTheme()
+                  .primaryColor,
               borderRadius: const BorderRadius.all(
                 Radius.circular(38.0),
               ),
@@ -269,7 +296,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   padding: const EdgeInsets.all(16.0),
                   child: Icon(FontAwesomeIcons.search,
                       size: 20,
-                      color: AppTheme.buildLightTheme().backgroundColor),
+                      color: AppTheme
+                          .buildLightTheme()
+                          .backgroundColor),
                 ),
               ),
             ),
@@ -302,7 +331,8 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     Navigator.push<dynamic>(
                       context,
                       MaterialPageRoute<dynamic>(
-                          builder: (BuildContext context) => DetailScreen(title),),
+                        builder: (BuildContext context) =>
+                            DetailScreen(title),),
                     );
                   },
                   child: Padding(
@@ -319,45 +349,47 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: slideList.length,
-                  itemBuilder: (BuildContext context, int i) => Padding(
-                    padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                    child: Container(
-                      width: 120,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 120.0,
-                            width: 120.0,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Hero(
-                                tag: title+ slideList[i]['img'],
-                                child: CachedNetworkImage(
-                                  imageUrl: slideList[i]['img'].toString(),
-                                  placeholder: (context, url) => LoadingWidget(
-                                    isImage: true,
+                  itemBuilder: (BuildContext context, int i) =>
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                        child: Container(
+                          width: 120,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 120.0,
+                                width: 120.0,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Hero(
+                                    tag: title + slideList[i]['img'],
+                                    child: CachedNetworkImage(
+                                      imageUrl: slideList[i]['img'].toString(),
+                                      placeholder: (context, url) =>
+                                          LoadingWidget(
+                                            isImage: true,
+                                          ),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  slideList[i]['title'],
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              slideList[i]['title'],
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
                 )),
           ],
         ),
@@ -384,12 +416,13 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   ),
                 ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
                     Navigator.push<dynamic>(
                       context,
                       MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => DetailScreen(title),),
+                        builder: (BuildContext context) =>
+                            DetailScreen(title),),
                     );
                   },
                   child: Padding(
@@ -436,20 +469,26 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                         style: TextStyle(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w800,
-                                          color: Theme.of(context).accentColor,
+                                          color: Theme
+                                              .of(context)
+                                              .accentColor,
                                         ),
                                       ),
                                     ),
                                   ),
                                   SizedBox(height: 10.0),
                                   Text(
-                                    '${slideList[index]['title'].length < 100 ? slideList[index]['title'] : slideList[index]['title'].substring(0, 100)}...'
+                                    '${slideList[index]['title'].length < 100
+                                        ? slideList[index]['title']
+                                        : slideList[index]['title'].substring(
+                                        0, 100)}...'
                                         .replaceAll(r'\n', '\n')
                                         .replaceAll(r'\r', '')
                                         .replaceAll(r'\"', '"'),
                                     style: TextStyle(
                                       fontSize: 13.0,
-                                      color: Theme.of(context)
+                                      color: Theme
+                                          .of(context)
                                           .textTheme
                                           .caption
                                           .color,
@@ -476,13 +515,14 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                     tag: slideList[index]['img'],
                                     child: CachedNetworkImage(
                                       imageUrl: slideList[index]['img'],
-                                      placeholder: (context, url) => Container(
-                                        height: 100.0,
-                                        width: 100.0,
-                                        child: LoadingWidget(
-                                          isImage: true,
-                                        ),
-                                      ),
+                                      placeholder: (context, url) =>
+                                          Container(
+                                            height: 100.0,
+                                            width: 100.0,
+                                            child: LoadingWidget(
+                                              isImage: true,
+                                            ),
+                                          ),
                                       fit: BoxFit.cover,
                                       height: 100.0,
                                       width: 100.0,
@@ -512,7 +552,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   Widget getAppBarUI() {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.buildLightTheme().backgroundColor,
+        color: AppTheme
+            .buildLightTheme()
+            .backgroundColor,
         boxShadow: <BoxShadow>[
           BoxShadow(
               color: Colors.grey.withOpacity(0.2),
@@ -522,7 +564,10 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       ),
       child: Padding(
         padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
+            top: MediaQuery
+                .of(context)
+                .padding
+                .top, left: 8, right: 8),
         child: Row(
           children: <Widget>[
             Container(
@@ -556,15 +601,13 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 }
 
 class ContestTabHeader extends SliverPersistentHeaderDelegate {
-  ContestTabHeader(
-    this.searchUI,
-  );
+  ContestTabHeader(this.searchUI,);
 
   final Widget searchUI;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset,
+      bool overlapsContent) {
     return searchUI;
   }
 
@@ -577,5 +620,11 @@ class ContestTabHeader extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return false;
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }
