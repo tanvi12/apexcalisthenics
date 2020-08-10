@@ -3,7 +3,6 @@ import 'package:Apexcalisthenics/discover/viewmodel/HomeViewModel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'app_theme.dart';
 import 'detail_screen.dart';
@@ -17,7 +16,6 @@ class DiscoverScreen extends StatefulWidget {
 class _DiscoverScreenState extends State<DiscoverScreen>
     with TickerProviderStateMixin {
   AnimationController animationController;
-  final ScrollController _scrollController = ScrollController();
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(days: 5));
@@ -64,52 +62,55 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                         children: <Widget>[
                           getAppBarUI(),
                           Expanded(
-                            child: NestedScrollView(
-                              controller: _scrollController,
-                              headerSliverBuilder:
-                                  (BuildContext context,
-                                  bool innerBoxIsScrolled) {
-                                return <Widget>[
-                                  SliverList(
-                                    delegate: SliverChildBuilderDelegate(
-                                            (BuildContext context, int index) {
-                                          return Column(
-                                            children: <Widget>[
-                                              getSearchBarUI(),
-                                            ],
-                                          );
-                                        }, childCount: 1),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
                                   ),
-                                ];
-                              },
-                              body: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: model.items
-                                          .length,
-                                      itemBuilder: (context, i) {
-                                        if( !model.items.keys.toList()[i].toString().toLowerCase().contains("article"))
+
+                                  ListView.builder(
+                                    padding: EdgeInsets.only(top: 10),
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: 1,
+                                    itemBuilder: (context, i) {
+                                      return productsCard(
+                                          "New",
+                                          model.everydayItems
+                                       );
+                                    },
+                                  ),
+
+                                  ListView.builder(
+                                    padding: EdgeInsets.only(top: 10),
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: model.items.length,
+                                    itemBuilder: (context, i) {
+                                      if (!model.items.keys
+                                          .toList()[i]
+                                          .toString()
+                                          .toLowerCase()
+                                          .contains("article"))
                                         return productsCard(
-                                            model.items.keys.toList()[i].toString().capitalize(),
-                                            model.items[model.items.keys
-                                                .toList()[i]]);
-                                        else
-                                          return productsVerticalCard(
-                                              model.items.keys.toList()[i].toString().capitalize(),
-                                              model.items[model.items.keys
-                                                  .toList()[i]]);
-                                      },
-                                    ),
-
-
-                                  ],
-                                ),
+                                            model.items.keys
+                                                .toList()[i]
+                                                .toString()
+                                                .capitalize(),
+                                            model.items[
+                                            model.items.keys.toList()[i]]);
+                                      else
+                                        return productsVerticalCard(
+                                            model.items.keys
+                                                .toList()[i]
+                                                .toString()
+                                                .capitalize(),
+                                            model.items[
+                                            model.items.keys.toList()[i]]);
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
                           )
@@ -225,89 +226,6 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     );
   }
 
-  Widget getSearchBarUI() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppTheme
-                      .buildLightTheme()
-                      .backgroundColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(38.0),
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        offset: const Offset(0, 2),
-                        blurRadius: 8.0),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 4, bottom: 4),
-                  child: TextField(
-                    onChanged: (String txt) {},
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                    cursorColor: AppTheme
-                        .buildLightTheme()
-                        .primaryColor,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Search...',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: AppTheme
-                  .buildLightTheme()
-                  .primaryColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(38.0),
-              ),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    offset: const Offset(0, 2),
-                    blurRadius: 8.0),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(32.0),
-                ),
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Icon(FontAwesomeIcons.search,
-                      size: 20,
-                      color: AppTheme
-                          .buildLightTheme()
-                          .backgroundColor),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget productsCard(String title, List slideList) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
@@ -331,8 +249,8 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     Navigator.push<dynamic>(
                       context,
                       MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) =>
-                            DetailScreen(title),),
+                        builder: (BuildContext context) => DetailScreen(title),
+                      ),
                     );
                   },
                   child: Padding(
@@ -363,7 +281,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: Hero(
-                                    tag: title + slideList[i]['img'],
+                                    tag: title + slideList[i]['img'].toString(),
                                     child: CachedNetworkImage(
                                       imageUrl: slideList[i]['img'].toString(),
                                       placeholder: (context, url) =>
@@ -421,8 +339,8 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     Navigator.push<dynamic>(
                       context,
                       MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) =>
-                            DetailScreen(title),),
+                        builder: (BuildContext context) => DetailScreen(title),
+                      ),
                     );
                   },
                   child: Padding(

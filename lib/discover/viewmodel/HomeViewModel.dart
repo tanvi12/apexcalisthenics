@@ -5,12 +5,33 @@ class HomeViewModel extends ChangeNotifier {
   String title = 'COMPLETED';
 
   List<String> collections = new List();
+
+
   Map<String, List<dynamic>> items = new Map<String, List<dynamic>>();
+
+  List<dynamic> everydayItems =  List<dynamic>();
 
   final Firestore db = Firestore.instance;
 
 
   void initialise() {
+    everydayItems.clear();
+    Query query = db.collection("new");
+
+
+    Stream slides = query
+        .snapshots()
+        .map((list) => list.documents.map((doc) => doc.data));
+    slides.listen((snap) {
+      List data = snap.toList();
+
+      everydayItems = data;
+
+
+      notifyListeners();
+    });
+
+
     Query collection = db.collection('collection');
 
     collections.clear();
@@ -30,21 +51,16 @@ class HomeViewModel extends ChangeNotifier {
             .snapshots()
             .map((list) => list.documents.map((doc) => doc.data));
         slides.listen((snap) {
-
           List data = snap.toList();
-          
+
           items.putIfAbsent(collections[i], () => null);
           items[collections[i]] = data;
 
 
           notifyListeners();
         });
-
       }
-
     });
-
-
 
 
 //    query = db.collection('exercises');
