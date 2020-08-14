@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:Apexcalisthenics/discover/viewmodel/HomeViewModel.dart';
+import 'package:Apexcalisthenics/models/exercise.dart';
+import 'package:Apexcalisthenics/program_detail/Program_Detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -268,43 +270,65 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   scrollDirection: Axis.horizontal,
                   itemCount: slideList.length,
                   itemBuilder: (BuildContext context, int i) =>
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                        child: Container(
-                          width: 120,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 120.0,
-                                width: 120.0,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: Hero(
-                                    tag: title + slideList[i]['img'].toString(),
-                                    child: CachedNetworkImage(
-                                      imageUrl: slideList[i]['img'].toString(),
-                                      placeholder: (context, url) =>
-                                          LoadingWidget(
-                                            isImage: true,
-                                          ),
-                                      fit: BoxFit.cover,
+                      GestureDetector(
+                        onTap: (){
+                          Exercise exercise = new Exercise(
+                              title: slideList[i]['title'],
+                              time: "2 weeks",
+                              difficult: "Start",
+                              image: slideList[i]['img'].toString());
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) {
+                                return ActivityDetail(
+                                  exercise: exercise,
+                                  tag: 'imageHeader$i',
+                                );
+                              },
+                            ),
+                          );
+
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                          child: Container(
+                            width: 120,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 120.0,
+                                  width: 120.0,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Hero(
+                                      tag: title + slideList[i]['img'].toString(),
+                                      child: CachedNetworkImage(
+                                        imageUrl: slideList[i]['img'].toString(),
+                                        placeholder: (context, url) =>
+                                            LoadingWidget(
+                                              isImage: true,
+                                            ),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  slideList[i]['title'],
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                SizedBox(
+                                  height: 10,
                                 ),
-                              )
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    slideList[i]['title'],
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),

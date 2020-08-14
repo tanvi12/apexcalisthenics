@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:Apexcalisthenics/discover/viewmodel/DetailViewModel.dart';
+import 'package:Apexcalisthenics/models/exercise.dart';
+import 'package:Apexcalisthenics/program_detail/Program_Detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,364 +49,407 @@ class _DetailScreenState extends State<DetailScreen> {
     return ViewModelBuilder<DetailViewModel>.reactive(
       viewModelBuilder: () => DetailViewModel(),
       onModelReady: (model) => model.initialise(title.toLowerCase()),
-      builder: (context, model, _) => Theme(
-        data: AppTheme.buildLightTheme(),
-        child: Container(
-          child: Scaffold(
-            appBar: AppBar(
-              leading: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    focusColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.grey.withOpacity(0.2),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Icon(
-                          Platform.isAndroid
-                              ? Icons.arrow_back
-                              : Icons.arrow_back_ios,
-                          color: AppTheme.buildLightTheme().primaryColor,
-                        )),
-                  )),
-              backgroundColor: AppTheme.buildLightTheme().backgroundColor,
-              title: Expanded(
-                  child: Center(
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22,
-                          color: AppTheme.buildLightTheme().primaryColor,
+      builder: (context, model, _) =>
+          Theme(
+            data: AppTheme.buildLightTheme(),
+            child: Container(
+              child: Scaffold(
+                appBar: AppBar(
+                  leading: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        focusColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        splashColor: Colors.grey.withOpacity(0.2),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(4.0),
                         ),
-                      ))),
-              actions: [
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    focusColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.grey.withOpacity(0.2),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          // return object of type Dialog
-                          return StatefulBuilder(builder: (context, setState) {
-                            {
-                              List<String> keys = model.tags.keys.toList();
-                              return AlertDialog(
-                                contentPadding: EdgeInsets.only(top: 12.0),
-                                content: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: double.maxFinite,
-                                        height:
-                                        MediaQuery.of(context).size.height *
-                                            .60,
-                                        child: ListView.builder(
-                                            itemCount: keys.length,
-                                            shrinkWrap: true,
-                                            itemBuilder: (context, index) {
-                                              return Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(keys[index].toString(),
-                                                      style: TextStyle(
-                                                          color:
-                                                          Colors.black26)),
-                                                  ListView.builder(
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Icon(
+                              Platform.isAndroid
+                                  ? Icons.arrow_back
+                                  : Icons.arrow_back_ios,
+                              color: AppTheme
+                                  .buildLightTheme()
+                                  .primaryColor,
+                            )),
+                      )),
+                  backgroundColor: AppTheme
+                      .buildLightTheme()
+                      .backgroundColor,
+                  title: Expanded(
+                      child: Center(
+                          child: Text(
+                            title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 22,
+                              color: AppTheme
+                                  .buildLightTheme()
+                                  .primaryColor,
+                            ),
+                          ))),
+                  actions: [
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        focusColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        splashColor: Colors.grey.withOpacity(0.2),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(4.0),
+                        ),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // return object of type Dialog
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                    {
+                                      List<String> keys = model.tags.keys
+                                          .toList();
+                                      return AlertDialog(
+                                        contentPadding: EdgeInsets.only(
+                                            top: 12.0),
+                                        content: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .start,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: double.maxFinite,
+                                                height:
+                                                MediaQuery
+                                                    .of(context)
+                                                    .size
+                                                    .height *
+                                                    .60,
+                                                child: ListView.builder(
+                                                    itemCount: keys.length,
                                                     shrinkWrap: true,
-                                                    itemCount: model.tags[
-                                                    keys[index]
-                                                        .toString()]
-                                                        .toList()
-                                                        .length,
-                                                    itemBuilder: (context, i) {
-                                                      String val = model.tags[
-                                                      keys[index]
-                                                          .toString()]
-                                                          .toList()[i]
-                                                          .toString();
-                                                      return CheckboxListTile(
-                                                        activeColor:
-                                                        Colors.black,
-                                                        contentPadding:
-                                                        EdgeInsets.only(
-                                                            left: 10),
-                                                        title: Text(val),
-                                                        value: selectedItems
-                                                            .containsValue(model
-                                                            .tags[keys[
-                                                        index]
-                                                            .toString()]
-                                                            .toList()[i]
-                                                            .toString()),
-                                                        onChanged: (bool) {
-                                                          setState(() {
-                                                            String key =
+                                                    itemBuilder: (context,
+                                                        index) {
+                                                      return Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Text(keys[index]
+                                                              .toString(),
+                                                              style: TextStyle(
+                                                                  color:
+                                                                  Colors
+                                                                      .black26)),
+                                                          ListView.builder(
+                                                            shrinkWrap: true,
+                                                            itemCount: model
+                                                                .tags[
                                                             keys[index]
-                                                                .toString();
-
-                                                            if (selectedItems
-                                                                .values
+                                                                .toString()]
                                                                 .toList()
-                                                                .contains(
-                                                                val)) {
-                                                              selectedItems
-                                                                  .remove(key);
-                                                            } else {
-                                                              selectedItems
-                                                                  .putIfAbsent(
-                                                                  key,
-                                                                      () =>
-                                                                  null);
-                                                              selectedItems[key] = model
-                                                                  .tags[keys[
-                                                              index]
+                                                                .length,
+                                                            itemBuilder: (
+                                                                context, i) {
+                                                              String val = model
+                                                                  .tags[
+                                                              keys[index]
                                                                   .toString()]
                                                                   .toList()[i]
                                                                   .toString();
-                                                            }
-                                                          });
-                                                        },
+                                                              return CheckboxListTile(
+                                                                activeColor:
+                                                                Colors.black,
+                                                                contentPadding:
+                                                                EdgeInsets.only(
+                                                                    left: 10),
+                                                                title: Text(
+                                                                    val),
+                                                                value: selectedItems
+                                                                    .containsValue(
+                                                                    model
+                                                                        .tags[keys[
+                                                                    index]
+                                                                        .toString()]
+                                                                        .toList()[i]
+                                                                        .toString()),
+                                                                onChanged: (
+                                                                    bool) {
+                                                                  setState(() {
+                                                                    String key =
+                                                                    keys[index]
+                                                                        .toString();
+
+                                                                    if (selectedItems
+                                                                        .values
+                                                                        .toList()
+                                                                        .contains(
+                                                                        val)) {
+                                                                      selectedItems
+                                                                          .remove(
+                                                                          key);
+                                                                    } else {
+                                                                      selectedItems
+                                                                          .putIfAbsent(
+                                                                          key,
+                                                                              () =>
+                                                                          null);
+                                                                      selectedItems[key] =
+                                                                          model
+                                                                              .tags[keys[
+                                                                          index]
+                                                                              .toString()]
+                                                                              .toList()[i]
+                                                                              .toString();
+                                                                    }
+                                                                  });
+                                                                },
+                                                              );
+                                                            },
+                                                          ),
+                                                        ],
                                                       );
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            }),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text(
-                                      "CANCEL",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  FlatButton(
-                                    child: Text(
-                                      "RESET",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        selectedItems.clear();
-                                      });
-                                    },
-                                  ),
-                                  FlatButton(
-                                    child: Text("APPLY",
-                                        style: TextStyle(color: Colors.black)),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      model.applyFilter(
-                                          title, selectedItems.values.toList());
-                                    },
-                                  )
-                                ],
-                              );
-                            }
-                          });
+                                                    }),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text(
+                                              "CANCEL",
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text(
+                                              "RESET",
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                selectedItems.clear();
+                                              });
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text("APPLY",
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              model.applyFilter(
+                                                  title, selectedItems.values
+                                                  .toList());
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    }
+                                  });
+                            },
+                          );
                         },
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            'Filter',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              fontSize: 16,
-                            ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                'Filter',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.sort,
+                                    color: AppTheme
+                                        .buildLightTheme()
+                                        .primaryColor),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.sort,
-                                color: AppTheme.buildLightTheme().primaryColor),
-                          ),
-                        ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                body: model.items.length == 0
+                    ? Container(
+                  child: Center(
+                    child: Text(
+                      'No result found...',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w100,
+                        fontSize: 16,
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            body: model.items.length == 0
-                ? Container(
-              child: Center(
-                child: Text(
-                  'No result found...',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w100,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            )
-                : SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16, right: 16, bottom: 8),
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListView.builder(
-                            primary: false,
-                            padding: EdgeInsets.only(top: 15.0),
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: model.items.length,
-                            itemBuilder:
-                                (BuildContext context, int index) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5.0, vertical: 5.0),
-                                child: Container(
-                                  height: 150.0,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0),
-                                          ),
-                                        ),
-                                        elevation: 4,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0),
-                                          ),
-                                          child: Hero(
-                                            tag: title +
-                                                model.items[index]['img'],
-                                            child: CachedNetworkImage(
-                                              imageUrl: model.items[index]
-                                              ['img'],
-                                              placeholder:
-                                                  (context, url) =>
-                                                  Container(
-                                                    height: 150.0,
-                                                    width: 150.0,
-                                                    child: LoadingWidget(
-                                                      isImage: true,
-                                                    ),
-                                                  ),
-                                              fit: BoxFit.cover,
-                                              height: 150.0,
-                                              width: 150.0,
+                )
+                    : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, bottom: 8),
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListView.builder(
+                                primary: false,
+                                padding: EdgeInsets.only(top: 15.0),
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: model.items.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5.0, vertical: 5.0),
+                                    child: Container(
+                                      height: 150.0,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 10.0),
-                                      Flexible(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Hero(
-                                              tag: title +
-                                                  model.items[index]
-                                                  ['title'],
-                                              child: Material(
-                                                type: MaterialType
-                                                    .transparency,
-                                                child: Text(
-                                                  '${model.items[index]['title'].replaceAll(r'\', '')}',
-                                                  style: TextStyle(
-                                                    fontSize: 17.0,
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    color:
-                                                    Theme.of(context)
-                                                        .textTheme
-                                                        .title
-                                                        .color,
-                                                  ),
-                                                  maxLines: 2,
-                                                  overflow: TextOverflow
-                                                      .ellipsis,
+                                            elevation: 4,
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ),
+                                              child: Hero(
+                                                tag: title +
+                                                    model.items[index]['img'],
+                                                child: CachedNetworkImage(
+                                                  imageUrl: model.items[index]
+                                                  ['img'],
+                                                  placeholder:
+                                                      (context, url) =>
+                                                      Container(
+                                                        height: 150.0,
+                                                        width: 150.0,
+                                                        child: LoadingWidget(
+                                                          isImage: true,
+                                                        ),
+                                                      ),
+                                                  fit: BoxFit.cover,
+                                                  height: 150.0,
+                                                  width: 150.0,
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 5,
+                                          ),
+                                          SizedBox(width: 10.0),
+                                          Flexible(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Hero(
+                                                  tag: title +
+                                                      model.items[index]
+                                                      ['title'],
+                                                  child: Material(
+                                                    type: MaterialType
+                                                        .transparency,
+                                                    child: Text(
+                                                      '${model
+                                                          .items[index]['title']
+                                                          .replaceAll(
+                                                          r'\', '')}',
+                                                      style: TextStyle(
+                                                        fontSize: 17.0,
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        color:
+                                                        Theme
+                                                            .of(context)
+                                                            .textTheme
+                                                            .title
+                                                            .color,
+                                                      ),
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  '${model.items[index]['title']
+                                                      .length < 100
+                                                      ? model
+                                                      .items[index]['title']
+                                                      : model
+                                                      .items[index]['title']
+                                                      .substring(0, 100)}...'
+                                                      .replaceAll(r'\n', '\n')
+                                                      .replaceAll(r'\r', '')
+                                                      .replaceAll(r'\"', '"'),
+                                                  style: TextStyle(
+                                                    fontSize: 13.0,
+                                                    color: Theme
+                                                        .of(context)
+                                                        .textTheme
+                                                        .caption
+                                                        .color,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              '${model.items[index]['title'].length < 100 ? model.items[index]['title'] : model.items[index]['title'].substring(0, 100)}...'
-                                                  .replaceAll(r'\n', '\n')
-                                                  .replaceAll(r'\r', '')
-                                                  .replaceAll(r'\"', '"'),
-                                              style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .caption
-                                                    .color,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -418,7 +463,9 @@ class _DetailScreenState extends State<DetailScreen> {
           child: Container(
             height: 24,
             decoration: BoxDecoration(
-              color: AppTheme.buildLightTheme().backgroundColor,
+              color: AppTheme
+                  .buildLightTheme()
+                  .backgroundColor,
               boxShadow: <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey.withOpacity(0.2),
@@ -429,7 +476,9 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
         Container(
-          color: AppTheme.buildLightTheme().backgroundColor,
+          color: AppTheme
+              .buildLightTheme()
+              .backgroundColor,
           child: Padding(
             padding:
             const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
@@ -480,7 +529,9 @@ class _DetailScreenState extends State<DetailScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(Icons.sort,
-                                color: AppTheme.buildLightTheme().primaryColor),
+                                color: AppTheme
+                                    .buildLightTheme()
+                                    .primaryColor),
                           ),
                         ],
                       ),
@@ -503,97 +554,13 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget productsCard(String title, List slideList) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    title,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    Navigator.push<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => DetailScreen(title),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.keyboard_arrow_right),
-                  ),
-                )
-              ],
-            ),
-            Container(
-                height: 190.0,
-                child: ListView.builder(
-                  padding: EdgeInsets.only(top: 15),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: slideList.length,
-                  itemBuilder: (BuildContext context, int i) => Padding(
-                    padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                    child: Container(
-                      width: 120,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 120.0,
-                            width: 120.0,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Hero(
-                                tag: title + slideList[i]['img'],
-                                child: CachedNetworkImage(
-                                  imageUrl: slideList[i]['img'].toString(),
-                                  placeholder: (context, url) => LoadingWidget(
-                                    isImage: true,
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              slideList[i]['title'],
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget getAppBarUI(DetailViewModel model) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.buildLightTheme().backgroundColor,
+        color: AppTheme
+            .buildLightTheme()
+            .backgroundColor,
         boxShadow: <BoxShadow>[
           BoxShadow(
               color: Colors.grey.withOpacity(0.2),
@@ -603,7 +570,10 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
       child: Padding(
         padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
+            top: MediaQuery
+                .of(context)
+                .padding
+                .top, left: 8, right: 8),
         child: Row(
           children: <Widget>[
             InkWell(
@@ -652,7 +622,10 @@ class _DetailScreenState extends State<DetailScreen> {
                                 Container(
                                   width: double.maxFinite,
                                   height:
-                                  MediaQuery.of(context).size.height * .60,
+                                  MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height * .60,
                                   child: ListView.builder(
                                       itemCount: keys.length,
                                       shrinkWrap: true,
@@ -736,7 +709,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                   style: TextStyle(color: Colors.black)),
                               onPressed: () {
                                 Navigator.of(context).pop();
-                                if (selectedItems.values.toList().length > 0)
+                                if (selectedItems.values
+                                    .toList()
+                                    .length > 0)
                                   model.applyFilter(
                                       title, selectedItems.values.toList());
                               },
@@ -762,7 +737,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(Icons.sort,
-                          color: AppTheme.buildLightTheme().primaryColor),
+                          color: AppTheme
+                              .buildLightTheme()
+                              .primaryColor),
                     ),
                   ],
                 ),
@@ -776,15 +753,13 @@ class _DetailScreenState extends State<DetailScreen> {
 }
 
 class ContestTabHeader extends SliverPersistentHeaderDelegate {
-  ContestTabHeader(
-      this.searchUI,
-      );
+  ContestTabHeader(this.searchUI,);
 
   final Widget searchUI;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset,
+      bool overlapsContent) {
     return searchUI;
   }
 
